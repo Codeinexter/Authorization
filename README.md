@@ -47,7 +47,7 @@ Live version: https://authorization-rh58.onrender.com
 → (7) User clicks reset link → POST /api/auth/reset → Backend validates token and updates password
 → (8) On successful signup, send Welcome email via Mailtrap
 ```
-
+---
 
 ## Token Flow Diagram
 
@@ -81,6 +81,15 @@ sequenceDiagram
     Backend->>DB: Verify JWT
     Backend-->>Frontend: Protected Data
 ```
+---
+
+## 🔄 Token Lifecycle in Frontend
+
+- **Login:** Backend returns JWT.
+- **Store:** Token is kept in memory (via Zustand state) instead of localStorage for security.
+- **Verify:** On app load, verifyToken() checks if the token is still valid.
+- **Logout:** Clears state and removes token.
+- **Protected Routes:** React Router checks isAuthenticated from store.
 
 
 
