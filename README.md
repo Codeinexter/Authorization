@@ -83,7 +83,7 @@ sequenceDiagram
 ```
 ---
 
-## 🔄 Token Lifecycle in Frontend
+## Token Lifecycle in Frontend
 
 - **Login:** Backend returns JWT.
 - **Store:** Token is kept in memory (via Zustand state) instead of localStorage for security.
