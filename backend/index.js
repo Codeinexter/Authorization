@@ -11,11 +11,33 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
+const allowedOrigins = [
+    ...(process.env.ALLOWED_ORIGINS || process.env.CLIENT_URL || "")
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    "http://localhost:5173",
+    "http://localhost:3000",
+];
 
-app.use(cors({origin: "http://localhost:5173", credentials: true}));
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 app.use("/api/auth", authRoutes);
 
